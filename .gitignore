@@ -1,0 +1,15 @@
+# Gradle 编译产物
+build/
+.gradle/
+
+# IDEA 项目配置
+.idea/
+*.iml
+
+# 运行目录（Minecraft 运行时的世界、日志、mods等）
+run/
+
+# 其他本地临时文件
+out/
+*.log
+crash-reports/
