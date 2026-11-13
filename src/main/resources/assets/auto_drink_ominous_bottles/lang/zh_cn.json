@@ -1,0 +1,26 @@
+{
+  "key.auto_drink_ominous_bottles.toggle": "自动喝不祥之瓶 (开关)",
+  "key.auto_attack.toggle": "自动攻击 (开关)",
+
+  "text.autodrink.bottles.on": "自动不祥之兆: 已启用",
+  "text.autodrink.bottles.off": "自动不祥之兆: 已禁用",
+  "text.autodrink.attack.on": "自动攻击: §a开启",
+  "text.autodrink.attack.off": "自动攻击: §c关闭",
+
+  "text.autodrink.attack.failed": "§c[连点] 反射失败，当前版本可能不兼容！",
+  "text.autodrink.attack.triggered": "§e[连点] 触发连点!",
+
+  "text.autodrink.no_bottles_found": "§c[自动喝药] 背包中未找到不祥之瓶。",
+  "text.autodrink.found_bottles": "§a[自动喝药] 检测到以下药水：",
+  "text.autodrink.bottle_info": "%s - %s级不祥之瓶",
+  "text.autodrink.loc.hotbar": "快捷栏",
+  "text.autodrink.loc.inventory": "背包",
+
+  "text.autodrink.failed_no_bottle": "§c[自动喝药] 失败: 找不到不祥之瓶！",
+  "text.autodrink.drinking": "§a[自动喝药] 确认袭击结束，正在自动喝药！",
+
+  "text.autodrink.status.prefix": "[自动喝药] 袭击成员: ",
+  "text.autodrink.status.fighting": "§a有 (正在打)",
+  "text.autodrink.status.empty": "§c无 (已清空 %ss)",
+  "text.autodrink.status.paused": " §e[已喝药, 停止监控]"
+}

@@ -1,19 +1,27 @@
 {
   "schemaVersion": 1,
   "id": "auto_drink_ominous_bottles",
-  "version": "2.1.1",
+  "version": "${version}",
   "name": "Auto-Drink Ominous Bottles",
   "description": "Automatically drinks an Ominous Bottle when a raid ends.",
-  "authors": ["shumsic"],
+  "authors": [
+    "MagicKnife (Porter/Modifier)",
+    "shumsic (Original Author)"
+  ],
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
-    "client": ["com.shumsic.autodrinkominousbottles.AutoDrinkOminousBottlesClient"]
+    "client": [
+      "com.magicknife.autodrinkominousbottles.AutoDrinkOminousBottlesClient"
+    ]
   },
+  "mixins": [
+    "auto-drink-ominous-bottles.mixins.json"
+  ],
   "depends": {
     "minecraft": "~26.3",
     "fabricloader": ">=0.19.5",
-    "fabric-api": "*",
+    "fabric-api": ">=0.163.0+26.3",
     "java": ">=25"
   }
 }

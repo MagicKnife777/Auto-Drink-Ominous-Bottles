@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.16.3'
+    id 'net.fabricmc.fabric-loom' version '1.18-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -17,19 +17,36 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    // ✅ 必须要有这一行，否则找不到 KEYBOARD 等常量    
-    // ✅ 使用 modImplementation，防止游戏里崩溃
+
+    // 🚨 补上了这一行，提供 ClientModInitializer 等 Fabric 核心 API
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API 依赖
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25
+    it.options.encoding = "UTF-8"
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
     }
+    withSourcesJar()
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.release = 25
-    options.encoding = "UTF-8"
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}"}
+    }
 }

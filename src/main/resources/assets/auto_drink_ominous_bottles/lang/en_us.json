@@ -1,3 +1,26 @@
 {
-  "key.auto_drink_ominous_bottles.toggle": "Auto-Drink Ominous Bottles"
+  "key.auto_drink_ominous_bottles.toggle": "Toggle Auto-Drink",
+  "key.auto_attack.toggle": "Toggle Auto-Attack",
+
+  "text.autodrink.bottles.on": "Auto Ominous Bottles: Enabled",
+  "text.autodrink.bottles.off": "Auto Ominous Bottles: Disabled",
+  "text.autodrink.attack.on": "Auto-Attack: §aEnabled",
+  "text.autodrink.attack.off": "Auto-Attack: §cDisabled",
+
+  "text.autodrink.attack.failed": "§c[AutoAttack] Reflection failed, version incompatibility!",
+  "text.autodrink.attack.triggered": "§e[AutoAttack] Attack Triggered!",
+
+  "text.autodrink.no_bottles_found": "§c[AutoDrink] No Ominous Bottles found.",
+  "text.autodrink.found_bottles": "§a[AutoDrink] Found Ominous Bottles:",
+  "text.autodrink.bottle_info": "%s - Level %s Ominous Bottle",
+  "text.autodrink.loc.hotbar": "Hotbar",
+  "text.autodrink.loc.inventory": "Inventory",
+
+  "text.autodrink.failed_no_bottle": "§c[AutoDrink] Failed: No Ominous Bottles!",
+  "text.autodrink.drinking": "§a[AutoDrink] Raid ended, drinking bottle!",
+
+  "text.autodrink.status.prefix": "[AutoDrink] Raiders: ",
+  "text.autodrink.status.fighting": "§aYes (Fighting)",
+  "text.autodrink.status.empty": "§cNone (Empty %ss)",
+  "text.autodrink.status.paused": " §e[Drank, Paused]"
 }
