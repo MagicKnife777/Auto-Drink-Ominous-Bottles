@@ -13,6 +13,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
@@ -86,9 +87,23 @@ public class AutoDrinkOminousBottlesClient implements ClientModInitializer {
                 KeyMapping.Category.MISC
         ));
 
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            // 断线回调不能发包，只清理本地输入和当前会话状态。
+            resetDrinkingState(client);
+            lastTriggerTick = -1000;
+            firedThisVictory = false;
+            emptyTicks = 0;
+            triggerLockTicks = 0;
+            scanTimer = 0;
+            hasRaidersNow = false;
+            debugTimer = 0;
+            attackTicker = 0;
+        });
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             // 处理 R 键（喝药切换）
             while (toggle.consumeClick()) {
+                cancelDrinking(client);
                 enabled = !enabled;
                 if (client.player != null) {
                     updateModeMessage(client);
@@ -96,10 +111,6 @@ public class AutoDrinkOminousBottlesClient implements ClientModInitializer {
                 firedThisVictory = false;
                 emptyTicks = 0;
                 triggerLockTicks = 0;
-                useWasForced = false;
-                ticksToReleaseUse = -1;
-                ticksToSwapBack = -1;
-                prevHotbarSlot = -1;
             }
 
             // 处理 G 键（连点切换）
@@ -111,7 +122,9 @@ public class AutoDrinkOminousBottlesClient implements ClientModInitializer {
                             : Component.translatable("text.autodrink.attack.off");
                     client.player.sendOverlayMessage(msg);
                 }
-                if (!attackEnabled) {
+                if (attackEnabled) {
+                    cancelDrinking(client);
+                } else {
                     client.options.keyAttack.setDown(false); // 关闭时确保松手
                 }
                 attackTicker = 0; // 重置计时器
@@ -194,19 +207,36 @@ public class AutoDrinkOminousBottlesClient implements ClientModInitializer {
                 }
             } else if (ticksToSwapBack >= 0) {
                 if (ticksToSwapBack == 0) {
-                    if (prevHotbarSlot >= 0) {
-                        client.player.getInventory().setSelectedSlot(prevHotbarSlot);
-                        if (client.getConnection() != null) {
-                            client.getConnection().send(new ServerboundSetCarriedItemPacket(prevHotbarSlot));
-                        }
-                    }
-                    prevHotbarSlot = -1;
-                    ticksToSwapBack = -1;
+                    cancelDrinking(client);
                 } else {
                     ticksToSwapBack--;
                 }
             }
         });
+    }
+
+    private void cancelDrinking(Minecraft client) {
+        if (useWasForced && client.player != null && client.gameMode != null && client.player.isUsingItem()) {
+            client.gameMode.releaseUsingItem(client.player);
+        }
+        if (prevHotbarSlot >= 0 && client.player != null) {
+            client.player.getInventory().setSelectedSlot(prevHotbarSlot);
+            if (client.getConnection() != null) {
+                client.getConnection().send(new ServerboundSetCarriedItemPacket(prevHotbarSlot));
+            }
+        }
+        resetDrinkingState(client);
+    }
+
+    private void resetDrinkingState(Minecraft client) {
+        // 只释放本模组强制按下的右键，避免干扰玩家手动使用物品。
+        if (useWasForced) {
+            client.options.keyUse.setDown(false);
+        }
+        useWasForced = false;
+        ticksToReleaseUse = -1;
+        ticksToSwapBack = -1;
+        prevHotbarSlot = -1;
     }
 
     // 🌟 连点核心方法（反射强行解锁 private 方法）
